@@ -1,15 +1,42 @@
+{% comment %} {% load messages %} {% endcomment %}
 <h2>Image List</h2>
 {% load custom_filters %}
 {% for image in images %}
   <div>
     <h3>{{ image.title }}</h3>
     <img src="data:image/jpeg;base64,{{ image.image_data|base64_encode }}" width="200" height="200">
-    <form method="post" action="{% url 'delete_image' image.id %}">
+    <form method="post" action="{% url 'send_image_form' image.id %}">
       {% csrf_token %}
-      <input type="submit" value="Delete">
+      
+      {% if messages %}
+        <div id="messages">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <input type="text" name="username" placeholder="Recipient's username">
+      <input type="submit" value="Send">
     </form>
     <br>
   </div>
 {% empty %}
   <p>No images available.</p>
 {% endfor %}
+
+{% comment %} {% for image in images %}
+  <div>
+    <h3>{{ image.title }}</h3>
+    <img src="data:image/jpeg;base64,{{ image.image_data|base64_encode }}" width="200" height="200">
+    <form method="post" action="{% url 'send_image_form' image.id %}">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Recipient's username">
+      <input type="submit" value="Send">
+    </form>
+    <br>
+  </div>
+{% empty %}
+  <p>No images available.</p>
+{% endfor %} {% endcomment %}
+

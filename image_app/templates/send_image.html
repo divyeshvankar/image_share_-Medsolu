@@ -1,0 +1,8 @@
+<h2>Send Image</h2>
+<form method="post" action="{% url 'send_image' image.id %}">
+  {% csrf_token %}
+  <label for="username">Recipient Username:</label>
+  <input type="text" id="username" name="username" required><br><br>
+  <input type="hidden" name="image_id" value="{{ image.id }}">
+  <input type="submit" value="Send">
+</form>

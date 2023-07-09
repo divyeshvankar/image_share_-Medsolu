@@ -15,7 +15,7 @@
       // Function to start the camera stream
       function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: true })
-          .then(function(stream) {
+          .then(function(stream) {s
             video.srcObject = stream;
             cameraFeed.appendChild(video);
             video.play();
