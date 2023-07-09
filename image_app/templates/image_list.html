@@ -1,0 +1,15 @@
+<h2>Image List</h2>
+{% load custom_filters %}
+{% for image in images %}
+  <div>
+    <h3>{{ image.title }}</h3>
+    <img src="data:image/jpeg;base64,{{ image.image_data|base64_encode }}" width="200" height="200">
+    <form method="post" action="{% url 'delete_image' image.id %}">
+      {% csrf_token %}
+      <input type="submit" value="Delete">
+    </form>
+    <br>
+  </div>
+{% empty %}
+  <p>No images available.</p>
+{% endfor %}

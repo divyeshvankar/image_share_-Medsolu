@@ -1,0 +1,33 @@
+# Django project files
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+
+# Static files
+/static/
+!.gitkeep
+
+# Media files
+/media/
+!.gitkeep
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Development environment
+*.env
+
+# IDE specific files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Miscellaneous
+*.swp
+.DS_Store

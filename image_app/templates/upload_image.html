@@ -1,0 +1,79 @@
+
+
+<h2>Upload Image</h2>
+<form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}">
+
+  {% csrf_token %}
+  <label for="title">Title:</label>
+<input type="text" id="title" name="title"><br><br>
+  <label for="image">Image:</label>
+  <input type="file" name="image" accept="image/*" id="image-input"><br><br>
+  {% comment %} <button type="button" id="camera-button">Capture from Camera</button> {% endcomment %}
+  <input type="submit" value="Upload">
+  <a href="{% url 'upload_image' %}">Upload Image</a>
+<a href="{% url 'scan_photo' %}">Scan Photo</a>
+
+</form>
+<h2>Scan Photo</h2>
+
+<div id="camera-feed"></div>
+<button id="capture-button">Capture Photo</button>
+<canvas id="photo-canvas" style="display: none;"></canvas>
+<img id="captured-photo" style="display: none;">
+<!-- Add the following JavaScript code -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const cameraFeed = document.getElementById('camera-feed');
+      const captureButton = document.getElementById('capture-button');
+      const photoCanvas = document.getElementById('photo-canvas');
+      const video = document.createElement('video');
+  
+      // Function to start the camera stream
+      function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(function(stream) {
+            video.srcObject = stream;
+            cameraFeed.appendChild(video);
+            video.play();
+          })
+          .catch(function(error) {
+            console.error('Error accessing camera:', error);
+          });
+      }
+  
+      // Function to capture and upload the photo
+      function capturePhoto() {
+        const context = photoCanvas.getContext('2d');
+        const width = video.videoWidth;
+        const height = video.videoHeight;
+        photoCanvas.width = width;
+        photoCanvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+  
+        const dataURL = photoCanvas.toDataURL('image/jpeg');
+  
+        // Create a FormData object and append the image data
+        const formData = new FormData();
+        formData.append('title', 'Scanned Image');
+        formData.append('image', dataURL);
+  
+        // Send the image data to the server using AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/images/upload/');
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            window.location.href = '/images/';
+          }
+        };
+        xhr.send(formData);
+      }
+  
+      // Event listener for the capture button
+      captureButton.addEventListener('click', capturePhoto);
+  
+      // Start the camera when the page loads
+      startCamera();
+    });
+  </script>
+  
