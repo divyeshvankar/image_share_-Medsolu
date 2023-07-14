@@ -19,10 +19,17 @@
       <input type="text" name="username" placeholder="Recipient's username">
       <input type="submit" value="Send">
     </form>
+
+    <form method="post" action="{% url 'delete_image' image.id %}">
+      {% csrf_token %}
+      <input type="submit" value="Delete">
+    </form>
     <br>
   </div>
+  <h2>To Send the image again <a href="/upload"> Click Here </a></h2>
 {% empty %}
   <p>No images available.</p>
+  <h2>To Send the image <a href="/upload"> Click Here </a></h2>
 {% endfor %}
 
 {% comment %} {% for image in images %}
